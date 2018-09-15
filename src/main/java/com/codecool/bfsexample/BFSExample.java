@@ -1,37 +1,36 @@
 package com.codecool.bfsexample;
 
+import com.codecool.bfsexample.dao.UserNodeDAO;
+import com.codecool.bfsexample.helpers.GraphPlotter;
+import com.codecool.bfsexample.helpers.HibernateUtil;
+import com.codecool.bfsexample.helpers.RandomDataGenerator;
 import com.codecool.bfsexample.model.UserNode;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import java.util.List;
 
 public class BFSExample {
 
-    public static void populateDB(EntityManager em) {
-
+    public static void populateDB(UserNodeDAO userNodeDAO) {
         RandomDataGenerator generator = new RandomDataGenerator();
         List<UserNode> users = generator.generate();
-
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        for (UserNode user : users) {
-            em.persist(user);
-        }
-        transaction.commit();
-
-        GraphPlotter.plot(users);
-        
-        System.out.println("Done!");
+        userNodeDAO.addAll(users);
     }
 
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bfsExampleUnit");
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = HibernateUtil.getEnityManagerFactory().createEntityManager();
+        UserNodeDAO userNodeDAO = new UserNodeDAO(em);
 
         em.clear();
-        populateDB(em);
+        populateDB(userNodeDAO);
+        List<UserNode> users = userNodeDAO.getAll();
+        GraphPlotter.plot(users);
+
+        System.out.println("Done!");
+    }
+
+    public static int findDistance(UserNode start, UserNode end) {
+
+        return -1;
     }
 }

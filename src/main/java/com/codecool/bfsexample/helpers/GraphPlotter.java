@@ -1,4 +1,4 @@
-package com.codecool.bfsexample;
+package com.codecool.bfsexample.helpers;
 
 import com.codecool.bfsexample.model.UserNode;
 import org.graphstream.graph.Graph;
